@@ -1,13 +1,13 @@
 Contributors
 ------------
-[@Gillardo](https://github.com/Gillardo/), [@TankOs](https://github.com/TankOs), [@Rovi23](https://github.com/Rovi23), [@josemanuelbd](https://github.com/josemanuelbd), [@ielcoro](https://github.com/ielcoro), [@keturn](https://github.com/keturn), [@conform](https://github.com/conform), [@guyc](https://github.com/guyc), [@J3r0M3D3V](https://github.com/J3r0M3D3V), [@WuglyakBolgoink](https://github.com/WuglyakBolgoink), [@lincolnthree](https://github.com/lincolnthree), [@rocco](https://github.com/rocco/), [@FrankFenton](https://github.com/FrankFenton), [@MHolmes91](https://github.com/MHolmes91), [@souly1](https://github.com/souly1), [@diogodias86](https://github.com/diogodias86), [@Arxi](https://github.com/Arxi), [@vzharkov](https://github.com/vzharkov), [@lp1bp](https://github.com/lp1bp), [@stalniy](https://github.com/stalniy), [@liugogal](https://github.com/liugogal), [@lcaprini](https://github.com/lcaprini), [@jcdickman](https://github.com/jcdickman)
+[@Gillardo](https://github.com/Gillardo/), [@TankOs](https://github.com/TankOs), [@Rovi23](https://github.com/Rovi23), [@josemanuelbd](https://github.com/josemanuelbd), [@ielcoro](https://github.com/ielcoro), [@keturn](https://github.com/keturn), [@conform](https://github.com/conform), [@guyc](https://github.com/guyc), [@J3r0M3D3V](https://github.com/J3r0M3D3V), [@WuglyakBolgoink](https://github.com/WuglyakBolgoink), [@lincolnthree](https://github.com/lincolnthree), [@rocco](https://github.com/rocco/), [@FrankFenton](https://github.com/FrankFenton), [@MHolmes91](https://github.com/MHolmes91), [@souly1](https://github.com/souly1), [@diogodias86](https://github.com/diogodias86), [@Arxi](https://github.com/Arxi), [@vzharkov](https://github.com/vzharkov), [@lp1bp](https://github.com/lp1bp), [@stalniy](https://github.com/stalniy), [@liugogal](https://github.com/liugogal), [@lcaprini](https://github.com/lcaprini), [@jcdickman](https://github.com/jcdickman), [@jankoester](https://github.com/janfkoester), [@Evolution36](https://github.com/evolution-36)
 
 
-A File Opener Plugin for Cordova (The Original Version)
+A File Opener Plugin for Cordova (The E36 Version)
 ==========================
 This plugin will open a file on your device file system with its default application.
 
-Current Version: 2.0.19
+Current Version: 4.0.0
 ----------------
 
 Requirements
@@ -17,7 +17,7 @@ Requirements
 
 Installation
 -------------
-    cordova plugin add cordova-plugin-file-opener2
+    cordova plugin add cordova-plugin-file-opener2-e36
     
 Usage
 ------
@@ -29,6 +29,18 @@ Usage
             success : function(){ } 
         } 
     );
+    
+Updates
+--------
+This plugin was re-released because the version by pwlin did not have support to open files writable and the plugin did not receive any updates. We wanted this plugin to be available on npm again and have the ability for the community to improve upon the plugin as well.
+
+##### Version 4.0.0
+ * Android  Oreo open files with write permissions
+ * Default support library 27.0.1
+ * Added root path for sdcard support
+ 
+ * Fix problem with errors not throwing the error callback in windows
+
 
 Examples
 --------
