@@ -42,6 +42,8 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 import org.apache.cordova.CordovaResourceApi;
+import 	android.os.StrictMode;
+import java.lang.reflect.Method;
 
 public class FileOpener2 extends CordovaPlugin {
 
@@ -103,10 +105,10 @@ public class FileOpener2 extends CordovaPlugin {
 		if (file.exists()) {
 			try {
 				Intent intent;
+				Uri path = Uri.fromFile(file);
 				if (contentType.equals("application/vnd.android.package-archive")) {
 					// https://stackoverflow.com/questions/9637629/can-we-install-an-apk-from-a-contentprovider/9672282#9672282
 					intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
-					Uri path;
 					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
 						path = Uri.fromFile(file);
 					} else {
@@ -116,13 +118,38 @@ public class FileOpener2 extends CordovaPlugin {
 					intent.setDataAndType(path, contentType);
 					intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-				} else {
+				} else if (Build.VERSION.SDK_INT > 23) {
 					intent = new Intent(Intent.ACTION_VIEW);
 					Context context = cordova.getActivity().getApplicationContext();
-					Uri path = FileProvider.getUriForFile(context, cordova.getActivity().getPackageName() + ".opener.provider", file);
+					path = FileProvider.getUriForFile(context, cordova.getActivity().getPackageName() + ".opener.provider", file);
 					intent.setDataAndType(path, contentType);
-					intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NO_HISTORY);
+					intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+					intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
+					List<ResolveInfo> infoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+					for (ResolveInfo resolveInfo : infoList) {
+						String packageName = resolveInfo.activityInfo.packageName;
+						context.grantUriPermission(packageName, path, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+						// JFK 28.07.2017 https://stackoverflow.com/questions/38200282/android-os-fileuriexposedexception-file-storage-emulated-0-test-txt-exposed
+						// If your app targets API 24+, and you still want/need to use file:// intents, you can use hacky way to disable the runtime check
+						//if("com.adobe.reader".equals(packageName)) { TMODL: activated for all packages
+						try {
+							// disable death on file uri exception (occurs when apps send file:// uris with intent to other apps on android sdk >= 24)
+							Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+							m.invoke(null);
+							// use file:// uri instead of content:// uri
+							intent.setDataAndType(Uri.fromFile(file), contentType);
+						}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+						//}
+					}
+				} else {
+					intent = new Intent(Intent.ACTION_VIEW);
+					intent.setDataAndType(path, contentType);
+					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				}
 
 				/*
