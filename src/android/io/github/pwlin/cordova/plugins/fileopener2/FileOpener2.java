@@ -22,6 +22,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 package io.github.pwlin.cordova.plugins.fileopener2;
 
+import java.net.URLDecoder;
 import java.io.File;
 import java.util.List;
 
@@ -101,7 +102,7 @@ public class FileOpener2 extends CordovaPlugin {
 		} catch (Exception e) {
 			fileName = fileArg;
 		}
-		File file = new File(fileName);
+		File file = new File(URLDecoder.decode(fileName, "UTF-8"));
 		if (file.exists()) {
 			try {
 				Intent intent;
